@@ -15,6 +15,7 @@ const errorMessage = {
   conflictHttpUser: 'Пользователь с таким email уже существует',
   wrongLink: 'Неверный формат ссылки',
   wrongId: 'Неверный формат ссылки',
+  serverError: 'На сервере произошла ошибка',
 };
 
 const validateMessage = {

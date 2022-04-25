@@ -16,22 +16,18 @@ const validateLink = Joi.string().required().custom((value, helpers) => {
   return helpers.message('Неверный формат ссылки');
 });
 
-const validateEmail = Joi.string().required().email();
-const validateString = Joi.string().required();
-const validateInfo = Joi.string().required().min(2).max(30);
-
 module.exports.validateCreateUser = celebrate({
   body: Joi.object().keys({
-    email: validateEmail,
-    password: validateString,
-    name: validateInfo,
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+    name: Joi.string().required().min(2).max(30),
   }),
 });
 
 module.exports.validateLogin = celebrate({
   body: Joi.object().keys({
-    email: validateEmail,
-    password: validateString,
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
   }),
 });
 
@@ -43,24 +39,24 @@ module.exports.validateUserById = celebrate({
 
 module.exports.validateUpdateUserInfo = celebrate({
   body: Joi.object().keys({
-    name: validateInfo,
-    email: validateEmail,
+    name: Joi.string().required().min(2).max(30),
+    email: Joi.string().required().email(),
   }),
 });
 
 module.exports.validateCreateMovie = celebrate({
   body: Joi.object().keys({
-    country: validateString,
-    director: validateString,
-    duration: validateString,
-    year: validateString,
-    description: validateString,
+    country: Joi.string().required(),
+    director: Joi.string().required(),
+    duration: Joi.number().required(),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
     image: validateLink,
-    trailer: validateLink,
+    trailerLink: validateLink,
     thumbnail: validateLink,
-    movieId: validateString,
-    nameRU: validateString,
-    nameEN: validateString,
+    movieId: Joi.number().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 

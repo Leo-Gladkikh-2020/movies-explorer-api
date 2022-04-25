@@ -12,28 +12,29 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body;
 
-  User.findOne({ email })
-    .then((user) => {
-      if (user) {
-        throw new ErrorConflictHttp(errorMessage.conflictHttpUser);
-      }
-      return bcrypt.hash(password, 10);
-    })
+  bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email, password: hash, name,
-    }))
-    .then((user) => res.send({
-      name: user.name,
-      email: user.email,
-      _id: user._id,
-    }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new ErrorBadRequest(errorMessage.badRequest));
-      } else {
-        next(err);
-      }
-    });
+    })
+      .then((user) => {
+        const newUser = user.toObject();
+        delete newUser.password;
+        res.send(newUser);
+      })
+      .then((user) => res.status(200).send({
+        name: user.name,
+        email: user.email,
+        _id: user._id,
+      }))
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          throw new ErrorBadRequest(errorMessage.badRequest);
+        } if (err.code === 11000) {
+          throw new ErrorConflictHttp(errorMessage.conflictHttpUser);
+        }
+        return next(err);
+      }))
+    .catch(next);
 };
 
 module.exports.updateUserInfo = (req, res, next) => {

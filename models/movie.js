@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { isUrl, validateMessage, requiredMessage } = require('../utils/constants');
+const { isURL, validateMessage, requiredMessage } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -31,9 +31,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, requiredMessage.image],
     validate: {
-      validator(v) {
-        return isUrl(v);
-      },
+      validator: (v) => isURL(v),
       message: validateMessage.image,
     },
   },
@@ -42,9 +40,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, requiredMessage.trailerLink],
     validate: {
-      validator(v) {
-        return isUrl(v);
-      },
+      validator: (v) => isURL(v),
       message: validateMessage.trailerLink,
     },
   },
@@ -53,9 +49,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, requiredMessage.thumbnail],
     validate: {
-      validator(v) {
-        return isUrl(v);
-      },
+      validator: (v) => isURL(v),
       message: validateMessage.thumbnail,
     },
   },

@@ -6,11 +6,11 @@ const { errors } = require('celebrate');
 const cors = require('cors');
 const helmet = require('helmet');
 
-const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const errorHandler = require('./middlewares/handler');
 const limiter = require('./middlewares/rateLimit');
+const errorHandler = require('./middlewares/handler');
 const { portNumber, dbAddress } = require('./utils/constants');
+const router = require('./routes/index');
 
 const { PORT = portNumber, MONGODB = dbAddress } = process.env;
 mongoose.connect(MONGODB, { useNewUrlParser: true });
@@ -22,7 +22,6 @@ app.use(cors());
 app.use(requestLogger);
 app.use(helmet());
 app.use(limiter);
-
 app.use(router);
 
 // удалить после финального ревью
@@ -37,6 +36,5 @@ app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });
