@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { isURL, validateMessage, requiredMessage } = require('../utils/constants');
+const { validateMessage, requiredMessage } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -31,7 +31,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, requiredMessage.image],
     validate: {
-      validator: (v) => isURL(v),
+      validator(v) {
+        return /^https?:\/\/(www.)?[-\w]+\.[-\w/]*/gim.test(v);
+        // проверено с помощью сервиса https://regex101.com/
+      },
       message: validateMessage.image,
     },
   },
@@ -40,7 +43,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, requiredMessage.trailerLink],
     validate: {
-      validator: (v) => isURL(v),
+      validator(v) {
+        return /^https?:\/\/(www.)?[-\w]+\.[-\w/]*/gim.test(v);
+        // проверено с помощью сервиса https://regex101.com/
+      },
       message: validateMessage.trailerLink,
     },
   },
@@ -49,7 +55,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, requiredMessage.thumbnail],
     validate: {
-      validator: (v) => isURL(v),
+      validator(v) {
+        return /^https?:\/\/(www.)?[-\w]+\.[-\w/]*/gim.test(v);
+        // проверено с помощью сервиса https://regex101.com/
+      },
       message: validateMessage.thumbnail,
     },
   },

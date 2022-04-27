@@ -51,11 +51,13 @@ module.exports.updateUserInfo = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ErrorBadRequest(errorMessage.badRequest));
-      } else {
-        next(err);
+        throw new ErrorBadRequest(errorMessage.badRequest);
+      } if (err.code === 11000) {
+        throw new ErrorConflictHttp(errorMessage.conflictHttpUser);
       }
-    });
+      return next(err);
+    })
+    .catch(next);
 };
 
 module.exports.login = (req, res, next) => {

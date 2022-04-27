@@ -23,14 +23,6 @@ app.use(requestLogger);
 app.use(helmet());
 app.use(limiter);
 app.use(router);
-
-// удалить после финального ревью
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);

@@ -1,7 +1,5 @@
 const portNumber = 3000;
 const dbAddress = 'mongodb://localhost:27017/moviesdb';
-const isUrl = /^https?:\/\/(www.)?[-\w]+\.[-\w/]*/gim.test;
-// проверено с помощью сервиса https://regex101.com/
 
 const errorMessage = {
   badRequest: 'Переданы некорректные данные',
@@ -47,7 +45,6 @@ const requiredMessage = {
 module.exports = {
   portNumber,
   dbAddress,
-  isUrl,
   errorMessage,
   validateMessage,
   requiredMessage,
