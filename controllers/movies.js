@@ -40,21 +40,42 @@ module.exports.createMovie = (req, res, next) => {
     });
 };
 
+// module.exports.deleteMovie = (req, res, next) => {
+//   Movie.findById(req.params.movieId)
+//     .orFail(() => {
+//       throw new ErrorNotFound(errorMessage.notFoundMovie);
+//     })
+//     .then((movie) => {
+//       if (String(movie.owner) === String(req.user._id)) {
+//         return movie.remove()
+//           .then(() => res.status(200).send({ message: 'Фильм удален' }));
+//       }
+//       throw new ErrorForbidden(errorMessage.forbiddenMovie);
+//     })
+//     .catch((err) => {
+//       if (err.name === 'CastError') {
+//         next(new ErrorBadRequest(errorMessage.badRequestMovie));
+//       } else {
+//         next(err);
+//       }
+//     });
+// };
+
 module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
-    .orFail(() => {
-      throw new ErrorNotFound(errorMessage.notFoundMovie);
-    })
     .then((movie) => {
-      if (String(movie.owner) !== String(req.user._id)) {
-        return movie.remove()
-          .then(() => res.status(200).send({ message: 'Фильм удален' }));
+      if (!movie) {
+        throw new ErrorNotFound(errorMessage.notFoundMovie);
       }
-      throw new ErrorForbidden(errorMessage.forbiddenMovie);
+      if (String(movie.owner) !== String(req.user._id)) {
+        throw new ErrorForbidden(errorMessage.forbiddenMovie);
+      }
+      return Movie.findByIdAndRemove(req.params.movieId);
     })
+    .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new ErrorBadRequest(errorMessage.badRequestMovie));
+        next(new ErrorBadRequest('Передан не валидный id пользователя'));
       } else {
         next(err);
       }
